@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تمريضك - الرعاية الصحية المنزلية</title>
+    <style>
+        :root {
+            --primary-color: #00796b;
+            --primary-dark: #004d40;
+            --accent-color: #26a69a;
+            --card-bg: #ffffff;
+        }
+        body { 
+            background: linear-gradient(135deg, rgba(0, 77, 64, 0.9), rgba(0, 38, 30, 0.95)), url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; box-sizing: border-box; align-items: center; 
+        }
+        .splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #004d40, #00251a);
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .splash-content { text-align: center; animation: fadeIn 1.2s ease-in-out; }
+        .splash-logo-box {
+            width: 90px; height: 90px; background: rgba(255,255,255,0.1); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; margin: 0 auto 15px;
+            box-shadow: 0 0 25px rgba(38,166,154,0.6); border: 2px solid var(--accent-color);
+        }
+        .splash-logo-box img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; }
+        .splash-content h1 { color: #ffffff; font-size: 26px; margin: 0; font-weight: bold; }
+        .splash-content p { color: #b2dfdb; font-size: 14px; margin-top: 8px; }
+        .loader {
+            border: 4px solid rgba(255,255,255,0.2); border-top: 4px solid var(--accent-color);
+            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto 0;
+        }
+        .container { 
+            background: var(--card-bg); padding: 25px; border-radius: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            width: 100%; max-width: 580px; box-sizing: border-box; border-top: 6px solid var(--accent-color); 
+            animation: slideUp 0.8s ease-out; margin: 20px 0;
+        }
+        .top-image-container { text-align: center; margin-bottom: 10px; }
+        .top-image-container img {
+            width: 75px; height: 75px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--accent-color); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        h2 { color: var(--primary-dark); text-align: center; margin-bottom: 5px; font-size: 22px; }
+        .sub-title { text-align: center; color: #555; font-size: 12px; margin-bottom: 15px; font-weight: bold; }
+        
+        .contact-box {
+            background: #f1f8e9; border: 2px solid #c5e1a5; padding: 12px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;
+        }
+        .qr-side { text-align: center; }
+        .qr-side a { display: inline-block; background: #fff; padding: 4px; border-radius: 8px; border: 1px solid #aed581; }
+        .qr-side img { width: 65px; height: 65px; display: block; border-radius: 6px; }
+        .qr-side span { font-size: 9px; color: #33691e; display: block; margin-top: 2px; font-weight: bold; }
+        .info-side { text-align: left; width: calc(100% - 85px); padding-right: 10px; }
+        .info-side .title { font-size: 12px; color: #2e7d32; font-weight: bold; margin-bottom: 4px; }
+        .info-side .phone-link {
+            font-size: 15px; color: #1b5e20; font-weight: bold; direction: ltr; background: #ffffff;
+            padding: 5px 10px; border-radius: 8px; display: inline-block; border: 1px solid #aed581;
+            text-decoration: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* تنسيق شبكة الخدمات الملونة الجديدة */
+        .services-section-title {
+            font-size: 13px; color: var(--primary-dark); font-weight: bold; margin-bottom: 8px;
+            display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #eee; padding-bottom: 5px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .service-badge {
+            padding: 10px 6px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            line-height: 1.3;
+        }
+        .service-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            filter: brightness(0.97);
+        }
+        .service-badge.active {
+            border: 2px solid var(--primary-dark);
+            box-shadow: 0 0 10px rgba(0,121,107,0.4);
+            transform: scale(1.02);
+        }
+
+        /* ألوان الكروت المميزة */
+        .c-1 { background-color: #fff3e0; color: #e65100; } /* برتقالي */
+        .c-2 { background-color: #e3f2fd; color: #0d47a1; } /* أزرق */
+        .c-3 { background-color: #e8f5e9; color: #1b5e20; } /* أخضر فاتح */
+        .c-4 { background-color: #f3e5f5; color: #4a148c; } /* بنفسجي */
+        .c-5 { background-color: #ffebee; color: #b71c1c; } /* أحمر فاتح */
+        .c-6 { background-color: #e0f2f1; color: #004d40; } /* تركواز */
+        .c-7 { background-color: #fffde7; color: #f57f17; } /* أصفر */
+        .c-8 { background-color: #fce4ec; color: #880e4f; } /* وردي */
+
+        .form-card { background: #fafafa; border: 1px solid #e0e0e0; padding: 15px 20px; border-radius: 14px; }
+        .rules { background: #fff8e1; border: 1px solid #ffe082; padding: 10px; border-radius: 8px; font-size: 12px; color: #5d4037; margin-bottom: 12px; line-height: 1.5; }
+        
+        label { display: block; margin-top: 10px; color: #2c3e50; font-weight: bold; font-size: 12px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid #b0bec5; border-radius: 8px; box-sizing: border-box; font-size: 13px; font-family: inherit; background: #fff; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 5px rgba(38,166,154,0.3); }
+        textarea { resize: vertical; min-height: 60px; }
+        
+        button[type="submit"] { background: var(--primary-color); color: white; border: none; padding: 13px; width: 100%; border-radius: 8px; margin-top: 15px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,121,107,0.3); transition: background 0.3s; }
+        button[type="submit"]:hover { background: var(--primary-dark); }
+        
+        #msg { text-align: center; margin-top: 12px; font-weight: bold; font-size: 13px; }
+        .success-text { color: #2e7d32; }
+        .error-text { color: #c62828; background: #ffebee; padding: 6px; border-radius: 6px; border: 1px solid #ffcdd2; margin-top: 8px; }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="splashScreen" class="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo-box">
+                <img src="image.jpeg" alt="Logo">
+            </div>
+            <h1>منصة تمريضك</h1>
+            <p>الرعاية الصحية الأفضل بين يديك...</p>
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display: none;">
+        <div class="top-image-container">
+            <img src="image.jpeg" alt="Tamreedak Logo">
+        </div>
+
+        <h2>منصة تمريضك الطبية</h2>
+        <div class="sub-title">الرعاية الصحية المتكاملة والتمريض المنزلي المعتمد بالأسكندرية</div>
+        
+        <div class="contact-box">
+            <div class="qr-side">
+                <a href="https://wa.me/201006828894?text=مرحباً، أريد الاستفسار عن خدمات منصة تمريضك" target="_blank" title="مراسلة المشرف">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://wa.me/201006828894" alt="WhatsApp QR">
+                </a>
+                <span>امسح للواتساب</span>
+            </div>
+            <div class="info-side">
+                <div class="title">📞 اتصال مباشر بالمشرف:</div>
+                <a href="tel:01006828894" class="phone-link">01006828894</a>
+            </div>
+        </div>
+
+        <!-- قسم اليوميات الملونة للخدمات -->
+        <div class="services-section-title">
+            <span>✨ الخدمات التمريضية الأساسية والإضافية</span>
+        </div>
+        <div class="services-grid">
+            <div class="service-badge c-1" onclick="selectService('ممرض 8 ساعات')">ممرض 8 ساعات</div>
+            <div class="service-badge c-2" onclick="selectService('ممرض 12 ساعة')">ممرض 12 ساعة</div>
+            <div class="service-badge c-3" onclick="selectService('ممرض 24 ساعة')">ممرض 24 ساعة</div>
+            <div class="service-badge c-4" onclick="selectService('زيارة تمريضية')">زيارة تمريضية</div>
+            <div class="service-badge c-5" onclick="selectService('حقن وأدوية')">حقن وأدوية</div>
+            <div class="service-badge c-6" onclick="selectService('تركيب قسطرة')">تركيب قسطرة</div>
+            <div class="service-badge c-7" onclick="selectService('تغيير الجروح')">تغيير الجروح</div>
+            <div class="service-badge c-8" onclick="selectService('قياس العلامات الحيوية')">قياس العلامات الحيوية</div>
+            <div class="service-badge c-1" onclick="selectService('قياس السكر والضغط')">قياس السكر والضغط</div>
+            <div class="service-badge c-2" onclick="selectService('متابعة ما بعد العمليات')">متابعة ما بعد العمليات</div>
+            <div class="service-badge c-3" onclick="selectService('رعاية كبار السن')">رعاية كبار السن</div>
+            <div class="service-badge c-4" onclick="selectService('رعاية طريحي الفراش')">رعاية طريحي الفراش</div>
+            <div class="service-badge c-5" onclick="selectService('سحب عينات منزلية')">سحب عينات منزلية</div>
+            <div class="service-badge c-6" onclick="selectService('رسم قلب (ECG)')">رسم قلب (ECG)</div>
+            <div class="service-badge c-7" onclick="selectService('علاج طبيعي منزلي')">علاج طبيعي منزلي</div>
+        </div>
+
+        <div class="form-card">
+            <div class="rules">
+                <strong>📌 تعليمات الدفع وتأكيد الحجز:</strong><br>
+                • تحويل رسوم المعاينة (50 ج) على محفظة المشرف: <strong style="direction:ltr; display:inline-block;">01006828894</strong> لتأكيد الموعد.<br>
+                • باقي الحساب يُسدد بعد اتمام الزيارة الطبية.
+            </div>
+
+            <form id="bookingForm">
+                <label>اسم المريض رباعي:</label>
+                <input type="text" id="name" required placeholder="أدخل اسم المريض رباعي صحيح">
+
+                <label>رقم الهاتف (11 رقم يبدأ بـ 01):</label>
+                <input type="tel" id="phone" required pattern="01[0-9]{9}" maxlength="11" placeholder="01xxxxxxxxxx">
+
+                <label>المنطقة (الأسكندرية فقط):</label>
+                <select id="city" required>
+                    <option value="" disabled selected>-- اختر منطقتك بالأسكندرية --</option>
+                    <option value="أبو قير">أبو قير</option>
+                    <option value="المندرة">المندرة</option>
+                    <option value="العصافرة">العصافرة</option>
+                    <option value="ميامي">ميامي</option>
+                    <option value="سيدي بشر">سيدي بشر</option>
+                    <option value="فيكتوريا">فيكتوريا</option>
+                    <option value="السيوف">السيوف</option>
+                    <option value="باكوس">باكوس</option>
+                    <option value="جليم">جليم</option>
+                    <option value="لوران">لوران</option>
+                    <option value="سان ستيفانو">سان ستيفانو</option>
+                    <option value="رشدي">رشدي</option>
+                    <option value="مصطفى كامل">مصطفى كامل</option>
+                    <option value="كليوباترا">كليوباترا</option>
+                    <option value="سبورتنج">سبورتنج</option>
+                    <option value="الإبراهيمية">الإبراهيمية</option>
+                    <option value="الشاطبي">الشاطبي</option>
+                    <option value="محطة الرمل">محطة الرمل</option>
+                    <option value="المنشية">المنشية</option>
+                    <option value="بحري والأنفوشي">بحري والأنفوشي</option>
+                    <option value="محرم بك">محرم بك</option>
+                    <option value="سموحة">سموحة</option>
+                    <option value="كرموز">كرموز</option>
+                    <option value="الورديان">الورديان</option>
+                    <option value="القباري">القباري</option>
+                    <option value="الدخيلة">الدخيلة</option>
+                    <option value="العجمي">العجمي</option>
+                    <option value="العامرية">العامرية</option>
+                </select>
+
+                <label>اختر الخدمة الطبية المطلوبة:</label>
+                <select id="service" required>
+                    <option value="" disabled selected>-- اختر الخدمة الطبية --</option>
+                    <option value="ممرض 8 ساعات">ممرض 8 ساعات</option>
+                    <option value="ممرض 12 ساعة">ممرض 12 ساعة</option>
+                    <option value="ممرض 24 ساعة">ممرض 24 ساعة</option>
+                    <option value="زيارة تمريضية">زيارة تمريضية</option>
+                    <option value="حقن وأدوية">حقن وأدوية</option>
+                    <option value="تركيب قسطرة">تركيب قسطرة</option>
+                    <option value="تغيير الجروح">تغيير الجروح</option>
+                    <option value="قياس العلامات الحيوية">قياس العلامات الحيوية</option>
+                    <option value="قياس السكر والضغط">قياس السكر والضغط</option>
+                    <option value="متابعة ما بعد العمليات">متابعة ما بعد العمليات</option>
+                    <option value="رعاية كبار السن">رعاية كبار السن</option>
+                    <option value="رعاية طريحي الفراش">رعاية طريحي الفراش</option>
+                    <option value="سحب عينات منزلية">سحب عينات منزلية</option>
+                    <option value="رسم قلب (ECG)">رسم قلب (ECG)</option>
+                    <option value="علاج طبيعي منزلي">علاج طبيعي منزلي</option>
+                </select>
+
+                <label>رقم المحفظة المحول منها رسوم المعاينة (11 رقم):</label>
+                <input type="tel" id="transfer_number" required pattern="01[0-9]{9}" maxlength="11" placeholder="01xxxxxxxxxx">
+
+                <label>ملاحظات الحالة الصحية (اختياري):</label>
+                <textarea id="notes" placeholder="اكتب تفاصيل عن حالة المريض الصحية..."></textarea>
+
+                <button type="submit">تأكيد حجز الخدمة الطبية</button>
+            </form>
+            <div id="msg"></div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                const mainContent = document.getElementById('mainContainer');
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+                mainContent.style.display = 'block';
+            }, 1800);
+        });
+
+        // دالة لاختيار الخدمة عند الضغط على الكارت الملون وتحديدها في القائمة
+        function selectService(serviceName) {
+            const selectElement = document.getElementById('service');
+            selectElement.value = serviceName;
+            
+            // تمييز الكارت المُختار بصرياً
+            document.querySelectorAll('.service-badge').forEach(badge => {
+                badge.classList.remove('active');
+                if(badge.innerText.trim() === serviceName) {
+                    badge.classList.add('active');
+                }
+            });
+        }
+
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCqTd0OWtOl7ileyW1m73P4W8nRMLX3GSQ1l-FUDDPn98q3TwoFshAKPyj4IXwZT297g/exec"; 
+        const ADMIN_PHONE = "201006828894";
+
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const city = document.getElementById('city').value;
+            const service = document.getElementById('service').value;
+            const transfer_number = document.getElementById('transfer_number').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+            const msgBox = document.getElementById('msg');
+
+            const nameParts = name.split(/\s+/).filter(Boolean);
+            if (nameParts.length < 4) {
+                msgBox.className = "error-text";
+                msgBox.innerHTML = "❌ خطأ في الإدخال: يرجى كتابة اسم المريض <strong>رباعي</strong> بوضوح.";
+                document.getElementById('name').focus();
+                return;
+            }
+
+            const btn = this.querySelector('button');
+            btn.disabled = true;
+            btn.innerText = "جاري إرسال الطلب وحفظ البيانات...";
+
+            const formData = new URLSearchParams();
+            formData.append('name', name);
+            formData.append('phone', phone);
+            formData.append('city', city);
+            formData.append('service', service);
+            formData.append('transfer', transfer_number);
+            formData.append('notes', notes || 'لا توجد ملاحظات');
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).catch(err => console.log(err));
+
+            const whatsappText = `🚨 *طلب حجز تمريض جديد (تم الدفع 50 ج)* 🚨%0a%0a` +
+                                 `👤 *اسم المريض:* ${name}%0a` +
+                                 `📱 *رقم الهاتف:* ${phone}%0a` +
+                                 `📍 *المنطقة:* ${city}%0a` +
+                                 `🩺 *الخدمة:* ${service}%0a` +
+                                 `💰 *رقم المحفظة:* ${transfer_number}%0a` +
+                                 `📝 *ملاحظات:* ${notes || 'لا توجد'}%0a%0a` +
+                                 `_التنبيه صادر تلقائياً من تطبيق منصة تمريضك_`;
+
+            msgBox.className = "success-text";
+            msgBox.innerText = "تم تسجيل طلبك بنجاح! جاري تحويلك للمشرف عبر الواتساب لتأكيد الاستلام...";
+
+            setTimeout(() => {
+                window.location.href = `https://wa.me/${ADMIN_PHONE}?text=${whatsappText}`;
+                btn.disabled = false;
+                btn.innerText = "تأكيد حجز الخدمة الطبية";
+                document.getElementById('bookingForm').reset();
+                document.querySelectorAll('.service-badge').forEach(b => b.classList.remove('active'));
+            }, 1200);
+        });
+    </script>
+</body>
+</html>
