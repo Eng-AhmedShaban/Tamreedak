@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>باركود منصة تمريضك</title>
+    <style>
+        body {
+            background-color: #121212;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .qr-card {
+            background: linear-gradient(135deg, #0b3c32, #04201a);
+            border: 2px solid #145a4d;
+            border-radius: 22px;
+            padding: 35px 25px;
+            text-align: center;
+            width: 100%;
+            max-width: 340px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            box-sizing: border-box;
+        }
+        .brand-title {
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .brand-sub {
+            color: #a7f3d0;
+            font-size: 12px;
+            margin-top: 5px;
+            margin-bottom: 22px;
+        }
+        .qr-frame {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 14px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .qr-frame img {
+            width: 170px;
+            height: 170px;
+            display: block;
+        }
+        .scan-text {
+            color: #fde047;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 18px;
+            line-height: 1.5;
+        }
+        .website-link {
+            color: #99f6e4;
+            font-size: 11px;
+            margin-top: 6px;
+            direction: ltr;
+        }
+        .btn-goto {
+            background: #26a69a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(38,166,154,0.4);
+            transition: background 0.3s;
+            box-sizing: border-box;
+        }
+        .btn-goto:hover {
+            background: #00796b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="qr-card">
+        <h1 class="brand-title">TAMREEDAK</h1>
+        <div class="brand-sub">منصة الرعاية الصحية المنزلية</div>
+        
+        <div class="qr-frame">
+            <!-- الباركود الموجه للواتساب أو صفحة الحجز -->
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://wa.me/201006828894?text=مرحباً، أريد حجز خدمة طبية من منصة تمريضك" alt="QR Code">
+        </div>
+
+        <div class="scan-text">
+            امسح الكود<br>واحجز خدمتك الطبية فوراً
+        </div>
+        <div class="website-link">www.tamreedak-eg.com</div>
+
+       
+    </div>
+
+</body>
+</html>
